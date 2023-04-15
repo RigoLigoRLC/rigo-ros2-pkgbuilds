@@ -1,0 +1,33 @@
+_pkgname=image_transport
+pkgname=ros2-humble-image-transport
+pkgver=4.2.0
+pkgrel=1
+arch=('any')
+makedepends=(
+    'boost'
+)
+depends=(
+    'ros2-humble'
+    'opencv'
+    'python-numpy'
+    'python-opencv'
+)
+source=("https://github.com/ros-perception/image_common/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    source /opt/ros/humble/setup.bash
+
+    cmake -S image_common-$pkgver/image_transport -B build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/opt/ros/humble
+}
+
+build() {
+source /opt/ros/humble/setup.bash
+    make -C build
+}
+
+package() {
+    make DESTDIR="$pkgdir/" -C build install
+}

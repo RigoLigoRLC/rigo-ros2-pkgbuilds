@@ -1,0 +1,28 @@
+_pkgname=udp_msgs
+pkgname=ros2-humble-udp-msgs
+pkgver=0.0.3
+pkgrel=1
+arch=('any')
+makedepends=()
+depends=(
+    'ros2-humble'
+)
+source=("https://github.com/flynneva/udp_msgs/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    source /opt/ros/humble/setup.bash
+
+    cmake -S $_pkgname-$pkgver/ -B build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/opt/ros/humble
+}
+
+build() {
+source /opt/ros/humble/setup.bash
+    make -C build
+}
+
+package() {
+    make DESTDIR="$pkgdir/" -C build install
+}
