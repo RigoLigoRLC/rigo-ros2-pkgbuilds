@@ -1,0 +1,33 @@
+_pkgname=transport_drivers
+pkgname=ros2-humble-transport-drivers
+pkgver=1.2.0
+pkgrel=1
+arch=('any')
+makedepends=()
+depends=(
+    'ros2-humble'
+    'ros2-humble-udp-msgs'
+)
+source=("https://github.com/ros-drivers/transport_drivers/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    source /opt/ros/humble/setup.bash
+
+    cd $_pkgname-$pkgver
+}
+
+build() {
+    source /opt/ros/humble/setup.bash
+    colcon build
+}
+
+package() {
+    cd install
+    installdir=$pkgdir/opt/ros/humble/
+    mkdir -p $installdir
+    cp -R asio_cmake_module/* $installdir
+    cp -R io_context/* $installdir
+    cp -R serial_driver/* $installdir
+    cp -R udp_driver/* $installdir
+}
